@@ -16,7 +16,7 @@
     <span
       :class="[
         store.menuMini ? 'opacity-[0]' : '',
-        `ml-10px select-none transition-[opacity] duration-300 opacity-[1]`,
+        `ml-10px select-none transition-[opacity] duration-100 opacity-[1]`,
       ]"
       >{{ item.meta.title }}</span
     >

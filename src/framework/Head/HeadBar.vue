@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-80px shadow-md">
-    <div class="flex h-45px items-center shadow px-10px">
+    <div class="flex h-45px items-center shadow px-10px gap-[10px]">
       <div
         class="inline-flex px-10px text-12px cursor-pointer bg-blue-500 text-white rounded-4px py-5px"
         @click="menuChange"
@@ -20,6 +20,11 @@
           ]"
         />
       </div>
+      <div class="text-sm text-gray-600 flex gap-[10px]">
+        <div v-for="(item, index) in menuLink">
+          <span>{{ item }}</span>
+        </div>
+      </div>
     </div>
     <div
       class="flex flex-auto h-0 px-10px items-center gap-10px overflow-auto hide-scroll"
@@ -32,11 +37,14 @@
 <script lang="ts" setup>
 import CacheMenu from "./CacheMenu.vue";
 import { useSettingsStore } from "@/store/settings";
+import { computed } from "vue";
 const store = useSettingsStore();
 
 const menuChange = () => {
   store.changeSetting("menuMini", !store.menuMini);
 };
+
+const menuLink = computed(() => [...store.activeMenu.parentNode?.map((item) => item.title) || [], store.activeMenu.meta.title])
 </script>
 
 <style lang="less" scoped>
