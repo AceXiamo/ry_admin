@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { setAppContext } from './utils/context'
 
 
 // unocss
@@ -30,3 +31,5 @@ app.use(router)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(ElementPlus)
 app.mount('#app')
+
+setAppContext(app)

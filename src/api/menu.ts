@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 import type { ResponseData } from '@/utils/request'
-import type { RouteRecordRaw } from 'vue-router' 
 
 export type Menu = {
   alwaysShow?: boolean;
@@ -15,9 +14,29 @@ export type Menu = {
   };
   name: string;
   path: string;
+  noClose?: boolean;
   redirect?: string;
-  parentNode?: Menu[];
-  router?: RouteRecordRaw;
+  parentNode?: MenuParentNode[];
+}
+
+export type MenuParentNode = {
+  name: string
+  title: string
+}
+
+export const mainMenu = {
+  name: 'Main',
+  path: '/',
+  meta: {
+    title: '首页',
+    icon: 'el-icon-s-home',
+    noCache: false,
+    link: '',
+  },
+  alwaysShow: false,
+  hidden: false,
+  noClose: true,
+  parentNode: [],
 }
 
 export const getRouters = (): Promise<ResponseData<Menu[]>> => {

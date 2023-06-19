@@ -1,67 +1,61 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import router from '@/router'
-
-export type CacheMenu = {
-  name: string
-  title: string
-  path: string
-  noClose: boolean
-  pNames?: string[]
-}
+import { Menu, mainMenu } from '@/api/menu'
 
 const cacheKey = 'site_setting'
 const storage = JSON.parse(localStorage.getItem(cacheKey) || '{}')
 export const useSettingsStore = defineStore('settings', () => {
   const menuMini = ref<boolean>(storage.menuMini || false)
-
-  // 缓存中的已打开菜单
-  const cacheMenus = ref<CacheMenu[]>(storage.cacheMenus || [
-    {
-      name: 'Main',
-      title: '首页',
-      path: '/',
-      noClose: true
-    }
+  const cacheMenus = ref<Menu[]>(storage.cacheMenus || [
+    mainMenu
   ])
-  const activeMenu = ref<string>(storage.activeMenu || 'Main')
+  const activeMenu = ref<Menu>(storage.activeMenu || mainMenu)
+  const subMenuLink = ref<string[]>(storage.subMenuLink || [])
 
-  const setMenus = (menus: CacheMenu[]) => {
-    cacheMenus.value = menus
-  }
-
-  const closeMenu = (name: string) => {
-    if (name === activeMenu.value) {
-      activeMenuChange('Main')
+  const closeMenu = (menu: Menu) => {
+    if (menu.name === activeMenu.value.name) {
+      activeMenuChange(mainMenu)
     }
-    const index = cacheMenus.value.findIndex((item) => item.name === name)
+    const index = cacheMenus.value.indexOf(menu)
     cacheMenus.value.splice(index, 1)
     settingHandle('cacheMenus', cacheMenus.value)
   }
 
-  const openMenu = (menu: CacheMenu) => {
+  const openMenu = (menu: Menu) => {
     const index = cacheMenus.value.findIndex((item) => item.name === menu.name)
     if (index === -1) {
       cacheMenus.value.push(menu)
     }
     settingHandle('cacheMenus', cacheMenus.value)
-    activeMenuChange(menu.name)
+    activeMenuChange(menu)
   }
 
-  const activeMenuChange = (name: string) => {
-    activeMenu.value = name
-
-    settingHandle('activeMenu', name)
-    let menu = cacheMenus.value.find((item) => item.name === name)
-    if (menu) {
-      router.push({
-        name: menu.name,
-      })
+  const subMenuHandle = (menu: Menu) => {
+    let arr: string[] = []
+    if (subMenuLink.value.includes(menu.name)) {
+      let i = subMenuLink.value.indexOf(menu.name)
+      arr = subMenuLink.value.slice(0, i)
+    } else {
+      if (menu.alwaysShow) { arr.push(menu.name) }
+      if (menu.parentNode) {
+        arr = [
+          ...menu.parentNode.map((item) => item.name),
+          ...arr
+        ]
+      }
     }
+    subMenuLink.value = arr
+    settingHandle('subMenuLink', arr)
   }
 
-  const changeActiveMenu = (name: string) => {
-    activeMenuChange(name)
+  const activeMenuChange = (menu: Menu) => {
+    activeMenu.value = menu
+    settingHandle('activeMenu', menu)
+    subMenuHandle(menu)
+    router.push({
+      name: menu.name,
+    })
   }
 
   const changeSetting = (key: string, value: boolean) => {
@@ -74,5 +68,5 @@ export const useSettingsStore = defineStore('settings', () => {
     localStorage.setItem(cacheKey, JSON.stringify(storage))
   }
 
-  return { menuMini, cacheMenus, activeMenu, changeActiveMenu, openMenu, setMenus, closeMenu, changeSetting }
+  return { menuMini, cacheMenus, activeMenu, subMenuLink, subMenuHandle, activeMenuChange, openMenu, closeMenu, changeSetting }
 })

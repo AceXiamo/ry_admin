@@ -3,7 +3,7 @@ import LoginPage from '@/views/login/index.vue'
 import Result from '@/views/result/index.vue'
 import Main from '@/views/main/index.vue'
 import Layout from '@/framework/Layout.vue'
-import { getRouters, Menu } from "@/api/menu";
+import { getRouters, Menu, MenuParentNode } from "@/api/menu";
 import type { RouteRecordRaw } from 'vue-router'
 import { useMenuStore } from '@/store/menu';
 import { getToken } from '../utils/auth';
@@ -85,13 +85,16 @@ const routerHandle = (items: Menu[]): RouteRecordRaw[] => {
   return routerArr
 }
 
-const routerDataParentHandle = (menus: Menu[], parent: Menu[] = []) => {
+const routerDataParentHandle = (menus: Menu[], parent: MenuParentNode[] = []) => {
   for (let menu of menus) {
     if (menu.children) {
-      routerDataParentHandle(menu.children, [...parent, menu])
-    } else {
-      menu.parentNode = [...parent]
+      let pNode = {
+        name: menu.name,
+        title: menu.meta.title
+      }
+      routerDataParentHandle(menu.children, [...parent, pNode])
     }
+    menu.parentNode = [...parent]
   }
 }
 
