@@ -1,13 +1,13 @@
 const TokenKey = 'Admin-Token'
 
-export function getToken() {
+export const getToken = () => {
   return localStorage.getItem(TokenKey)
 }
 
-export function setToken(token: string) {
+export const setToken = (token: string) => {
   return localStorage.setItem(TokenKey, token)
 }
 
-export function removeToken() {
+export const removeToken = () => {
   return localStorage.removeItem(TokenKey)
 }

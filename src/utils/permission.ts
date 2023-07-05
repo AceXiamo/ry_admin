@@ -43,51 +43,23 @@ const asyncRouterHanlde = (items: Menu[], parent?: RouteRecordRaw) => {
   })
 }
 
-const loadSyncRouter = () => {
-  return new Promise((resolve, reject) => {
-    if (menuStore.menus.value.length === 0) {
-      getRouters().then(res => {
-        if (res.code === 200) {
-          Logger.setting('menu & router', 'menu & router loaded ✅')
-          let menuItems = res.data
-          routerDataHandle(menuItems)
-          asyncRouterHanlde(menuItems)
-          menuStore.menus.value = [mainMenu, ...menuItems]
-          resolve('')
-        } else {
-          Logger.setting('menu & router', 'menu & router loaded, because is not login ❌')
-          reject('')
-        }
-      })
+const loadSyncRouter = async () => {
+  if (menuStore.menus.value.length === 0) {
+    let res = await getRouters();
+    if (res.code === 200) {
+      Logger.setting('menu & router', 'menu & router loaded ✅')
+      let menuItems = res.data
+      routerDataHandle(menuItems)
+      asyncRouterHanlde(menuItems)
+      menuStore.menus.value = [mainMenu, ...menuItems]
     }
-  })
+  }
 }
 
 await loadSyncRouter()
 
-// let menuStore: any = null
 router.beforeEach(async (to, from, next) => {
-
-  // menuStore = useMenuStore()
-  // Logger.setting('before jump', 'begin')
-  // Logger.setting('before jump', `pinia status: ${menuStore == null ? 'off' : 'on'}`)
-
-  // Logger.setting('before jump', `menu & router status: ${menuStore.menuItems.length === 0 ? 'off' : 'on'}`)
-  // if (menuStore.menuItems.length === 0) {
-  //   Logger.setting('before jump', 'menu & router loading...')
-
-  //   let res = await getRouters()
-  //   if (res.code === 200) {
-  //     Logger.setting('before jump', 'menu & router loaded ✅')
-
-  //     let menuItems = res.data
-  //     routerDataHandle(menuItems)
-  //     asyncRouterHanlde(menuItems)
-  //     menuStore.setMenus(menuItems)
-  //   } else {
-  //     Logger.setting('before jump', 'menu & router loaded, because is not login ❌')
-  //   }
-  // }
+  await loadSyncRouter()
 
   if (whiteList.indexOf(to.path) !== -1) {
     if (getToken()) {

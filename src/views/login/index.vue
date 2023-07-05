@@ -44,7 +44,7 @@ let form: any = ref<LoginForm>({
 });
 
 let codeImg = ref<string>("");
-  const router = useRouter()
+const router = useRouter();
 
 onMounted(() => {
   loadCodeImg();
@@ -74,7 +74,6 @@ const handleLogin = () => {
       document.onkeydown = null;
       ElMessage.success("登陆成功！");
       setToken(res.token);
-      
       router.push('/');
     } else {
       ElMessage.error(res.msg);
