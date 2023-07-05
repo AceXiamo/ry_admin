@@ -1,7 +1,7 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import { setAppContext } from './utils/context'
-
+import { createPinia } from 'pinia'
+import router from '@/router'
 
 // unocss
 import 'virtual:uno.css'
@@ -21,15 +21,14 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
 import App from './App.vue'
-import router from './router'
 import './css/base.less'
 import '@/utils/permission.ts'
 
 const app = createApp(App)
+
 app.use(createPinia())
 app.use(router)
 app.component('font-awesome-icon', FontAwesomeIcon)
 app.use(ElementPlus)
 app.mount('#app')
-
 setAppContext(app)

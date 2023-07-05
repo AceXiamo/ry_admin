@@ -1,14 +1,13 @@
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { defineStore } from 'pinia'
-import { Menu, mainMenu } from '@/api/menu';
+import type { Menu } from '@/api/menu';
 
-export const useMenuStore = defineStore('menu', () => {
+let menus = ref<Menu[]>([])
+const useMenuStore = defineStore('menu', () => {
 
-  let menuItems = ref<Menu[]>([])
+  let menuItems = reactive<Menu[]>(menus.value)
 
-  const setMenus = (menus: Menu[]) => {
-    menuItems.value = [mainMenu, ...menus]
-  }
-
-  return { menuItems, setMenus }
+  return { menuItems }
 })
+
+export { useMenuStore, menus }

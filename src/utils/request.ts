@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { getToken, setToken } from '@/utils/auth';
-import router from '@/router';
 import { ElMessage } from 'element-plus';
 
 export interface ResponseData<T> {
@@ -27,6 +26,11 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   (response) => {
     const code = response.data.code || 200;
+
+    if (response.config.headers.fullBack) {
+      return response.data;
+    }
+
     if (code === 401) {
       noPermissionHandle()
       return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
@@ -43,9 +47,6 @@ service.interceptors.response.use(
 const noPermissionHandle = () => {
   // 清除token
   setToken('');
-
-  // 跳转登录页
-  router.push({ path: '/login' });
   ElMessage.error('无效的会话，或者会话已过期，请重新登录。')
 }
 

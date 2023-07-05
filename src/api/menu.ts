@@ -42,6 +42,9 @@ export const mainMenu = {
 export const getRouters = (): Promise<ResponseData<Menu[]>> => {
   return request({
     url: '/getRouters',
-    method: 'get'
+    method: 'get',
+    headers: {
+      fullBack: true
+    }
   })
 }

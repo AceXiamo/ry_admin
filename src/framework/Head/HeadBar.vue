@@ -2,26 +2,26 @@
   <div class="flex flex-col h-80px shadow-md">
     <div class="flex h-45px items-center shadow px-10px gap-[10px]">
       <div
-        class="inline-flex px-10px text-12px cursor-pointer bg-blue-500 text-white rounded-4px py-5px"
+        class="inline-flex px-10px text-12px cursor-pointer bg-blue-500 text-white rounded-2px py-5px"
         @click="menuChange"
       >
         <font-awesome-icon
           :icon="['fas', 'sliders']"
           :class="[
-            'opacity-100 transition-all duration-100',
-            store.menuMini ? 'hide-icon' : '',
+            'transition-all duration-100',
+            store.menuMini ? 'opacity-0' : 'opacity-100',
           ]"
         />
         <font-awesome-icon
           :icon="['fas', 'bars']"
           :class="[
-            'absolute transition-all opacity-0 duration-100',
-            store.menuMini ? 'show-icon' : '',
+            'absolute transition-all duration-200',
+            store.menuMini ? 'opacity-[1]' : 'opacity-0',
           ]"
         />
       </div>
       <div class="text-sm text-gray-600 flex gap-[10px]">
-        <div v-for="(item, index) in menuLink">
+        <div class="px-10px bg-blue-500 text-white rounded-2px cursor-default" v-for="(item, index) in menuLink">
           <span>{{ item }}</span>
         </div>
       </div>
