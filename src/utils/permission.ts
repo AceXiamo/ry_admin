@@ -1,6 +1,6 @@
 import router from '@/router/index'
 import { getToken } from './auth'
-import * as menuStore from '@/store/menu'
+import { useMenuStore } from '@/store/menu'
 import { getRouters, Menu, MenuParentNode } from '@/api/menu'
 import type { RouteRecordRaw } from 'vue-router'
 import Logger from '@/utils/logger'
@@ -43,32 +43,23 @@ const asyncRouterHanlde = (items: Menu[], parent?: RouteRecordRaw) => {
   })
 }
 
-const loadSyncRouter = async () => {
-  if (menuStore.menus.value.length === 0) {
-    let res = await getRouters();
-    if (res.code === 200) {
-      Logger.setting('menu & router', 'menu & router loaded ✅')
-      let menuItems = res.data
-      routerDataHandle(menuItems)
-      asyncRouterHanlde(menuItems)
-      menuStore.menus.value = [mainMenu, ...menuItems]
-    }
-  }
-}
-
-await loadSyncRouter()
-
 router.beforeEach(async (to, from, next) => {
-  await loadSyncRouter()
-
-  if (whiteList.indexOf(to.path) !== -1) {
-    if (getToken()) {
-      next('/')
+  if (getToken()) {
+    if (useMenuStore().menuItems.length === 0) {
+      let res = await getRouters();
+      if (res.code === 200) {
+        Logger.setting('menu & router', 'menu & router loaded ✅')
+        let menuItems = res.data
+        routerDataHandle(menuItems)
+        asyncRouterHanlde(menuItems)
+        useMenuStore().menuItems = [mainMenu, ...menuItems]
+      }
+      next({ ...to, replace: true })
     } else {
       next()
     }
   } else {
-    if (getToken()) {
+    if (whiteList.indexOf(to.path) !== -1) { 
       next()
     } else {
       next('/login')

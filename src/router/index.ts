@@ -4,6 +4,7 @@ import Result from '@/views/result/index.vue'
 import Main from '@/views/main/index.vue'
 import Layout from '@/framework/Layout.vue'
 import type { RouteRecordRaw } from 'vue-router'
+import { createVNode } from 'vue'
 
 
 const routerArr: RouteRecordRaw[] = [
@@ -29,6 +30,10 @@ const routerArr: RouteRecordRaw[] = [
   {
     path: '/result',
     name: 'Result',
+    component: Result
+  },
+  {
+    path: "/:pathMatch(.*)*",
     component: Result
   },
 ]

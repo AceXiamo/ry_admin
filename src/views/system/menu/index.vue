@@ -14,9 +14,10 @@
         <el-button type="primary" @click="onSubmit">查询</el-button>
       </el-form-item>
     </el-form>
-    <el-table :data="tableData" style="width: 100%" border>
-      <el-table-column prop="date" label="Date" width="180" />
-      <el-table-column prop="name" label="Name" width="180" />
+
+    <el-table :data="tableData" style="width: 100%; margin-bottom: 20px" row-key="id" border>
+      <el-table-column prop="menuName" label="菜单名称" />
+      <el-table-column prop="name" label="Name" />
       <el-table-column prop="address" label="Address" />
     </el-table>
   </div>
@@ -26,28 +27,7 @@
 import { listMenu, ListMenuQuery, Menu } from '@/api/system/menu'
 import { reactive, ref, onMounted } from 'vue'
 
-const tableData = [
-  {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles',
-  },
-]
+let tableData = ref<Menu[]>([])
 
 const formInline = reactive<ListMenuQuery>({
   menuName: '',
@@ -61,19 +41,18 @@ const onSubmit = () => {
 
 onMounted(() => {
   listMenu(formInline).then(res => {
-    let data = tableDataHanlde(res.data, "0")
-    console.log(data)
+    tableData.value = tableDataHanlde(res.data, "0")
   })
 })
 
 const tableDataHanlde = (menus: Menu[], parentId: string) => {
-  let tableData: Menu[] = []
+  let data: Menu[] = []
   menus.forEach(menu => {
     if (menu.parentId === parentId) {
-
-      tableDataHanlde(menus, menu.menuId)
+      menu.children = tableDataHanlde(menus, menu.menuId)
+      data.push(menu)
     }
   })
-  return tableData
+  return data
 }
 </script>

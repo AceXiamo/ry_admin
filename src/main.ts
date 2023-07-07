@@ -2,6 +2,9 @@ import { createApp } from 'vue'
 import { setAppContext } from './utils/context'
 import { createPinia } from 'pinia'
 import router from '@/router'
+import FullLoading from '@/components/FullLoading'
+
+FullLoading.show(2000)
 
 // unocss
 import 'virtual:uno.css'
