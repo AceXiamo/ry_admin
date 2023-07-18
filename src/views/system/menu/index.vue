@@ -18,22 +18,23 @@
     <div class="w-full h-0 flex-auto flex" v-loading="loading">
       <el-table :data="tableData" height="100%" style="width: 2000px" row-key="menuId" size="small" border>
         <el-table-column prop="menuName" label="菜单名称" />
-        <el-table-column prop="icon" label="图标">
+        <el-table-column prop="icon" label="图标" width="200">
           <template #default="scope">
-            <div class="flex items-center gap-[5px]">
-              <font-awesome-icon
-                v-if="scope.row.icon?.indexOf('#') !== -1"
-                :icon="[scope.row.icon?.split('#')[0], scope.row.icon?.split('#')[1]]"
-                :class="[`text-gray-400 text-14px`, `hover:text-blue-500`]"
-              />
-              <span class="text-[13px] text-gray-500">{{ scope.row.icon }}</span>
+            <div class="flex items-center">
+              <div v-if="scope.row.icon?.indexOf('#') !== -1" class="w-[25px]">
+                <font-awesome-icon
+                  :icon="[scope.row.icon?.split('#')[0], scope.row.icon?.split('#')[1]]"
+                  :class="[`text-gray-400 text-14px`, `hover:text-blue-500`]"
+                />
+              </div>
+              <div class="text-[13px] text-gray-500 w-[150px] truncate">{{ scope.row.icon }}</div>
             </div>
           </template>
         </el-table-column>
         <el-table-column prop="orderNum" label="排序" />
         <el-table-column prop="perms" label="权限标识" />
-        <el-table-column prop="component" label="组件路径" />
-        <el-table-column prop="visible" label="状态">
+        <el-table-column prop="component" label="组件路径" width="250" />
+        <el-table-column prop="visible" label="状态" width="70">
           <template #default="scope">
             <el-tag size="small" :type="scope.row.status == 0 ? '' : 'info'"
               >{{ scope.row.status == 0 ? '正常' : '停用' }}
@@ -49,7 +50,10 @@
             <el-button type="primary" text bg icon="Plus" size="small" @click="showEdit(scope.row, 'add')"
               >新增</el-button
             >
-            <el-button type="primary" text bg icon="Delete" size="small" @click="scope">删除</el-button>
+
+            <RemoveButton @confirm="delHanlde(scope.row)">
+              <el-button type="primary" text bg icon="Delete" size="small" @click="scope">删除</el-button>
+            </RemoveButton>
           </template>
         </el-table-column>
       </el-table>
@@ -60,10 +64,11 @@
 </template>
 
 <script setup lang="ts">
-import { listMenu, ListMenuQuery, getMenu, updateMenu, addMenu, Menu } from '@/api/system/menu'
+import { listMenu, ListMenuQuery, updateMenu, addMenu, Menu, delMenu } from '@/api/system/menu'
 import { ElMessage } from 'element-plus'
 import { ref, onMounted } from 'vue'
 import ViewAndEdit from './components/ViewAndEdit.vue'
+import RemoveButton from '@/components/RemoveButton.vue'
 
 let tableData = ref<Menu[]>([])
 let loading = ref<boolean>(false)
@@ -109,9 +114,7 @@ const showEdit = (item: Menu, type: 'add' | 'update' | 'remove') => {
   if (type === 'remove') {
     // TODO
   } else {
-    getMenu(item.menuId).then((res) => {
-      viewAndEdit.value.show(res.data, type)
-    })
+    viewAndEdit.value.show(item, type)
   }
 }
 
@@ -127,5 +130,12 @@ const submitForm = (item: Menu, type: 'add' | 'update') => {
       loadData()
     })
   }
+}
+
+const delHanlde = (row: Menu) => {
+  delMenu(row.menuId).then(() => {
+    ElMessage.success('删除成功')
+    loadData()
+  })
 }
 </script>

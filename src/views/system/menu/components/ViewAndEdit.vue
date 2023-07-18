@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="showModal" title="菜单编辑" width="40%" :close-on-press-escape="canEscClose">
-    <el-form ref="ruleFormRef" :model="form" label-width="100px" :rules="rules">
+    <el-form ref="ruleFormRef" :model="form" label-width="100px" :rules="rules" v-loading="loading">
       <el-row>
         <el-col :span="24">
           <el-form-item label="上级菜单">
@@ -146,13 +146,14 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue'
 import type { FormInstance } from 'element-plus'
-import type { Menu } from '@/api/system/menu'
+import { getMenu, Menu } from '@/api/system/menu'
 import * as IconSelector from './IconSelector'
 
 const prop = defineProps<{
   menus: Menu[]
 }>()
 
+let loading = ref<boolean>(false)
 let canEscClose = ref<boolean>(true)
 const showModal = ref<boolean>(false)
 let form = ref<Menu>({
@@ -216,7 +217,13 @@ const show = (data: Menu, type: 'add' | 'update') => {
   }
 
   if (type === 'update') {
-    form.value = data
+    // loading.value = true
+    // getMenu(data.menuId).then((res) => {
+    //   form.value = res.data
+    // }).then(() => {
+    //   loading.value = false
+    // })
+    form.value = JSON.parse(JSON.stringify(data))
   } else {
     form.value.parentId = data.menuId
   }

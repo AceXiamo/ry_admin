@@ -147,7 +147,7 @@ const indexChange = (e: any) => {
     : icons.value[e]?.icons || []
   // fontawesome 读的值存在重复元素，就很怪 😅
   showIcons.value = Array.from(new Set(showIcons.value))
-
+  
   showIconHandle(0)
   containerDom?.scrollTo({
     top: 0
