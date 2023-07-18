@@ -34,7 +34,6 @@
 
 <script setup lang="ts">
 import type { Menu } from "@/api/menu";
-import type { PropType } from "vue";
 import { useSettingsStore } from "@/store/settings";
 
 const store = useSettingsStore();
