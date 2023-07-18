@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="[`w-[200px] bg-gray-600 origin-top-left transition-all duration-200 ${ani}`]"
+    :class="[`w-[200px] bg-gray-600 origin-top-left transition-all relative z-[9999] duration-200 ${ani}`]"
     @mouseleave="leaveHandle"
   >
     <item :menus="menu.children" :parent="parent"></item>
