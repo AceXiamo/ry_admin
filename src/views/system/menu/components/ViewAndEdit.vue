@@ -146,7 +146,7 @@
 <script lang="ts" setup>
 import { ref, reactive } from 'vue'
 import type { FormInstance } from 'element-plus'
-import { getMenu, Menu } from '@/api/system/menu'
+import type { Menu } from '@/api/system/menu'
 import * as IconSelector from './IconSelector'
 
 const prop = defineProps<{
@@ -217,12 +217,6 @@ const show = (data: Menu, type: 'add' | 'update') => {
   }
 
   if (type === 'update') {
-    // loading.value = true
-    // getMenu(data.menuId).then((res) => {
-    //   form.value = res.data
-    // }).then(() => {
-    //   loading.value = false
-    // })
     form.value = JSON.parse(JSON.stringify(data))
   } else {
     form.value.parentId = data.menuId
