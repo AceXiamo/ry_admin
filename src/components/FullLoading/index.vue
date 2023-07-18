@@ -44,7 +44,7 @@ onMounted(() => {
 })
 </script>
 
-<style>
+<style lang="less" scoped>
 .animate-load-in {
   animation: aniIn 0.25s linear forwards;
 }

@@ -1,10 +1,7 @@
 import { createApp } from 'vue'
-import { setAppContext } from './utils/context'
+import { setAppContext } from './core/context'
 import { createPinia } from 'pinia'
 import router from '@/router'
-import FullLoading from '@/components/FullLoading'
-
-FullLoading.show(2000)
 
 // unocss
 import 'virtual:uno.css'
@@ -22,13 +19,19 @@ library.add(fab)
 // element-plus
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+
+// animate.css
+import 'animate.css';
 
 import App from './App.vue'
 import './css/base.less'
 import '@/utils/permission.ts'
 
 const app = createApp(App)
-
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+  app.component(key, component)
+}
 app.use(createPinia())
 app.use(router)
 app.component('font-awesome-icon', FontAwesomeIcon)

@@ -16,7 +16,7 @@ export type Menu = {
   isFrame?: string
   menuId: string
   menuName?: string
-  menuType?: string
+  menuType?: 'M' | 'C' | 'F'
   orderNum?: number
   params?: any
   parentId?: string

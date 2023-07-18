@@ -3,16 +3,21 @@ import { getToken } from './auth'
 import { useMenuStore } from '@/store/menu'
 import { getRouters, Menu, MenuParentNode } from '@/api/menu'
 import type { RouteRecordRaw } from 'vue-router'
-import Logger from '@/utils/logger'
+import Logger from '@/core/logger'
 import { mainMenu } from '@/api/menu';
+import FullLoading from '@/components/FullLoading'
+
+if (getToken()) {
+  FullLoading.show(2000)
+}
 
 const whiteList = ['/login', '/auth-redirect', '/bind', '/register']
 const modules = import.meta.glob('@/views/**/*.vue')
 
 const routerDataHandle = (menus: Menu[], parent: MenuParentNode[] = []) => {
-  for (let menu of menus) {
+  for (const menu of menus) {
     if (menu.children) {
-      let pNode = {
+      const pNode = {
         name: menu.name,
         title: menu.meta.title
       }
@@ -24,8 +29,8 @@ const routerDataHandle = (menus: Menu[], parent: MenuParentNode[] = []) => {
 
 const asyncRouterHanlde = (items: Menu[], parent?: RouteRecordRaw) => {
   items.forEach(v => {
-    let path = v.path.startsWith('/') ? v.path : '/' + v.path;
-    let routerItem: RouteRecordRaw = {
+    const path = v.path.startsWith('/') ? v.path : '/' + v.path;
+    const routerItem: RouteRecordRaw = {
       path: parent ? parent.path + path : path,
       name: v.name,
       component: v.component === 'Layout' ? () => import('@/framework/Layout.vue') : modules[`/src/views/${v.component}.vue`],
@@ -46,10 +51,10 @@ const asyncRouterHanlde = (items: Menu[], parent?: RouteRecordRaw) => {
 router.beforeEach(async (to, from, next) => {
   if (getToken()) {
     if (useMenuStore().menuItems.length === 0) {
-      let res = await getRouters();
+      const res = await getRouters();
       if (res.code === 200) {
         Logger.setting('menu & router', 'menu & router loaded ✅')
-        let menuItems = res.data
+        const menuItems = res.data
         routerDataHandle(menuItems)
         asyncRouterHanlde(menuItems)
         useMenuStore().menuItems = [mainMenu, ...menuItems]
@@ -59,7 +64,7 @@ router.beforeEach(async (to, from, next) => {
       next()
     }
   } else {
-    if (whiteList.indexOf(to.path) !== -1) { 
+    if (whiteList.indexOf(to.path) !== -1) {
       next()
     } else {
       next('/login')
