@@ -1,9 +1,9 @@
 <template>
-  <template v-for="item in props.items">
+  <template v-for="(item, index) in props.items" :key="index">
     <div
       :class="[
         `flex flex-col text-gray-200 text-[13px] font-light cursor-pointer justify-center transition-all duration-300`,
-        `min-w-[200px]`,
+        `min-w-[200px]`
       ]"
     >
       <!-- menu item -->
@@ -15,13 +15,10 @@
         v-if="item.children && item.children.length > 0"
         :class="[
           `overflow-hidden transition-all duration-200 h-0px`,
-          store.subMenuLink.includes(item.name) ? `opacity-[1]` : 'opacity-0',
+          store.subMenuLink.includes(item.name) ? `opacity-[1]` : 'opacity-0'
         ]"
         :style="{
-          height:
-            store.subMenuLink.includes(item.name) && !store.menuMini
-              ? item.children.length * 55 + 'px'
-              : '',
+          height: store.subMenuLink.includes(item.name) && !store.menuMini ? item.children.length * 55 + 'px' : ''
         }"
       >
         <menu-bar :items="item.children" :level="level + 1"></menu-bar>
@@ -31,36 +28,36 @@
 </template>
 
 <script lang="ts" setup>
-import MenuItem from "./components/MenuItem.vue";
-import type { Menu } from "@/api/menu";
-import { PropType, ref } from "vue";
-import { useSettingsStore } from "@/store/settings";
-import * as MenuTip from "./components/MenuTip";
+import MenuItem from './components/MenuItem.vue'
+import type { Menu } from '@/api/menu'
+import { PropType, ref } from 'vue'
+import { useSettingsStore } from '@/store/settings'
+import * as MenuTip from './components/MenuTip'
 
-const store = useSettingsStore();
+const store = useSettingsStore()
 const props = defineProps({
   items: {
     type: Array as PropType<Menu[]>,
-    default: () => [],
+    default: () => []
   },
   level: {
     type: Number,
-    default: () => 0,
-  },
-});
+    default: () => 0
+  }
+})
 
-let vNodeCtx = ref();
+let vNodeCtx = ref()
 const mouseInMenuItem = (menu: Menu, e: any) => {
-  if (!store.menuMini) return;
+  if (!store.menuMini) return
 
-  let { vNode, container } = MenuTip.show(menu, e.target.offsetTop, e.target, true);
-  vNodeCtx.value = vNode;
-};
+  let { vNode, container } = MenuTip.show(menu, e.target.offsetTop, e.target, true)
+  vNodeCtx.value = vNode
+}
 
 const mouseLeave = () => {
   if (vNodeCtx.value) {
-    vNodeCtx.value?.component?.setupState.leaveHandle();
-    vNodeCtx.value = null;
+    vNodeCtx.value?.component?.setupState.leaveHandle()
+    vNodeCtx.value = null
   }
-};
+}
 </script>

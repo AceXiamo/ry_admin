@@ -10,8 +10,9 @@
     @click="clickHandle(item)"
   >
     <font-awesome-icon
+    v-if="item.meta.icon.indexOf('#') !== -1"
       class="text-[13px] -translate-y-[1px]"
-      :icon="`fa-solid fa-house`"
+      :icon="[item.meta.icon?.split('#')[0], item.meta.icon?.split('#')[1]]"
     />
     <span
       :class="[
