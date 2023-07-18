@@ -1,4 +1,4 @@
-import VueComponent from './index.vue'
+import VueComponent from './MenuTip.vue'
 import type { Menu } from '@/api/menu';
 import { createVNode, render, VNode } from 'vue';
 import { appContext } from '@/core/context';
