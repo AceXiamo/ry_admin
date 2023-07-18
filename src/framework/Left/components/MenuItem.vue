@@ -38,15 +38,11 @@ import type { PropType } from "vue";
 import { useSettingsStore } from "@/store/settings";
 
 const store = useSettingsStore();
-const props = defineProps({
-  item: {
-    type: Object as PropType<Menu>,
-    default: () => [],
-  },
-  level: {
-    type: Number,
-    default: () => 0,
-  },
+const props = withDefaults(defineProps<{
+  item: Menu;
+  level: number;
+}>(), {
+  level: 0,
 });
 
 /**
