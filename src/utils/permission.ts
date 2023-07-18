@@ -8,7 +8,7 @@ import { mainMenu } from '@/api/menu';
 import FullLoading from '@/components/FullLoading'
 
 if (getToken()) {
-  FullLoading.show(2000)
+  FullLoading.show(1000)
 }
 
 const whiteList = ['/login', '/auth-redirect', '/bind', '/register']
