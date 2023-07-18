@@ -1,6 +1,6 @@
 import VueComponent from './MenuTip.vue'
 import type { Menu } from '@/api/menu';
-import { createVNode, render, VNode } from 'vue';
+import { h, render } from 'vue';
 import { appContext } from '@/core/context';
 
 export type Link = {
@@ -18,7 +18,7 @@ export const show = (menu: Menu, y: number, parentEle: HTMLElement, isRoot: bool
     name: menu.name,
     ele: container,
   })
-  const vNode = createVNode(VueComponent, {
+  const vNode = h(VueComponent, {
     menu: menu, link: link,
     closeSubMenu: () => {
       const index = link.findIndex(item => item.name === menu.name)
