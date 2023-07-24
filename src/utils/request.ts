@@ -2,12 +2,6 @@ import axios from 'axios';
 import { getToken, setToken } from '@/utils/auth';
 import { ElMessage } from 'element-plus';
 
-export interface ResponseData<T> {
-  code: number;
-  data: T;
-  msg: string;
-}
-
 const service = axios.create({
   baseURL: '/dev-api',
   timeout: 60000,

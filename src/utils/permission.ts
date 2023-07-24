@@ -54,7 +54,7 @@ router.beforeEach(async (to, from, next) => {
       const res = await getRouters();
       if (res.code === 200) {
         Logger.setting('menu & router', 'menu & router loaded ✅')
-        const menuItems = res.data
+        const menuItems = res.data!
         routerDataHandle(menuItems)
         asyncRouterHanlde(menuItems)
         useMenuStore().menuItems = [mainMenu, ...menuItems]

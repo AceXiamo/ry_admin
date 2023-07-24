@@ -42,18 +42,26 @@
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" />
-        <el-table-column label="操作" width="230">
+        <el-table-column label="操作" width="170">
           <template #default="scope">
-            <el-button type="primary" text bg icon="EditPen" size="small" @click="showEdit(scope.row, 'update')"
-              >修改</el-button
-            >
-            <el-button type="primary" text bg icon="Plus" size="small" @click="showEdit(scope.row, 'add')"
-              >新增</el-button
-            >
+            <div class="flex gap-[10px]">
+              <el-link type="primary" size="small" @click="showEdit(scope.row, 'update')">
+                <font-awesome-icon :icon="['fas', 'edit']" class="text-[12px]" />
+                <span class="text-[12px] ml-[5px]">修改</span>
+              </el-link>
 
-            <RemoveButton @confirm="delHanlde(scope.row)">
-              <el-button type="primary" text bg icon="Delete" size="small" @click="scope">删除</el-button>
-            </RemoveButton>
+              <el-link type="primary" size="small" @click="showEdit(scope.row, 'add')">
+                <font-awesome-icon :icon="['fas', 'add']" class="text-[12px]" />
+                <span class="text-[12px] ml-[5px]">新增</span>
+              </el-link>
+
+              <RemoveButton @confirm="delHanlde(scope.row)">
+                <el-link type="primary" size="small">
+                  <font-awesome-icon :icon="['fas', 'trash-can']" />
+                  <span class="text-[12px] ml-[5px]">删除</span>
+                </el-link>
+              </RemoveButton>
+            </div>
           </template>
         </el-table-column>
       </el-table>
@@ -92,7 +100,7 @@ const loadData = () => {
   loading.value = true
   listMenu(formInline.value)
     .then((res) => {
-      tableData.value = tableDataHandle(res.data, '0')
+      tableData.value = tableDataHandle(res.data!, '0')
     })
     .finally(() => {
       loading.value = false

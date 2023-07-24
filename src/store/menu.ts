@@ -4,7 +4,7 @@ import type { Menu } from '@/api/menu';
 
 const useMenuStore = defineStore('menu', () => {
 
-  let menuItems = ref<Menu[]>([])
+  const menuItems = ref<Menu[]>([])
 
   return { menuItems }
 })

@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import type { ResponseData } from '@/utils/request'
 
 export type ListMenuQuery = {
   menuName?: string
@@ -27,10 +26,8 @@ export type Menu = {
   remark?: string
   searchValue?: any
   status?: string
-  updateBy?: string
-  updateTime?: string
   visible?: string
-}
+} & BaseEntity
 
 // 查询菜单列表
 export function listMenu(query: ListMenuQuery) : Promise<ResponseData<Menu[]>> {

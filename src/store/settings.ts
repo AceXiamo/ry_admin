@@ -34,7 +34,7 @@ export const useSettingsStore = defineStore('settings', () => {
   const subMenuHandle = (menu: Menu) => {
     let arr: string[] = []
     if (subMenuLink.value.includes(menu.name)) {
-      let i = subMenuLink.value.indexOf(menu.name)
+      const i = subMenuLink.value.indexOf(menu.name)
       arr = subMenuLink.value.slice(0, i)
     } else {
       if (menu.alwaysShow) { arr.push(menu.name) }

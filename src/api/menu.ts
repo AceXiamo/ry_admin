@@ -1,5 +1,4 @@
 import request from '@/utils/request'
-import type { ResponseData } from '@/utils/request'
 
 export type Menu = {
   alwaysShow?: boolean;
