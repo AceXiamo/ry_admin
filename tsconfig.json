@@ -1,16 +1,24 @@
 {
   "extends": "@vue/tsconfig/tsconfig.web.json",
-  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue"
+  ],
   "compilerOptions": {
+    "ignoreDeprecations": "5.0",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": [
+        "./src/*"
+      ]
     },
-    "types": ["element-plus/global"],
+    "types": [
+      "element-plus/global"
+    ],
     "preserveValueImports": false,
     // "isolatedModules": false,
   },
-
   "references": [
     {
       "path": "./tsconfig.node.json"
