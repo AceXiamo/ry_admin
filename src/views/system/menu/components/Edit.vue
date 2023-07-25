@@ -13,11 +13,11 @@
               :render-after-expand="false"
               class="w-full"
             >
-              <template #default="{ data }: { data: SelectorItem }">
+              <template #default="{ data }: { data: TreeSelectorItem }">
                 <div class="flex gap-[3px]">
                   <span class="text-gray-600 font-400 text-[14px]">{{ data.label }}</span>
-                  <span class="text-gray-400 font-400 text-[14px]" v-if="data.children!.length > 0">{{
-                    `(${data.children!.length})`
+                  <span class="text-gray-400 font-400 text-[14px]" v-if="data.children?.length">{{
+                    `(${data.children?.length})`
                   }}</span>
                 </div>
               </template>
@@ -172,26 +172,20 @@ const rules = reactive<any>({
 
 const emit = defineEmits(['confirm', 'cancel'])
 
-type SelectorItem = {
-  value?: string
-  label?: string
-  children?: SelectorItem[]
-}
-
 const selectorItemHandle = (menus: Menu[]) => {
-  const res: SelectorItem[] = []
-  const root: SelectorItem = {
+  const res: TreeSelectorItem[] = []
+  const root: TreeSelectorItem = {
     value: '0',
     label: '主目录',
     children: []
   }
   res.push(root)
 
-  const childHandle = (items: Menu[]): SelectorItem[] => {
-    const data: SelectorItem[] = []
+  const childHandle = (items: Menu[]): TreeSelectorItem[] => {
+    const data: TreeSelectorItem[] = []
     for (const item of items) {
       if (item.menuType !== 'F') {
-        const thisItem: SelectorItem = {
+        const thisItem: TreeSelectorItem = {
           value: item.menuId,
           label: item.menuName
         }
