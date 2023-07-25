@@ -68,19 +68,19 @@
     </div>
   </div>
 
-  <ViewAndEdit ref="viewAndEdit" :menus="tableData" @confirm="submitForm" />
+  <Edit ref="edit" :menus="tableData" @confirm="submitForm" />
 </template>
 
 <script setup lang="ts">
 import { listMenu, ListMenuQuery, updateMenu, addMenu, Menu, delMenu } from '@/api/system/menu'
 import { ElMessage } from 'element-plus'
 import { ref, onMounted } from 'vue'
-import ViewAndEdit from './components/ViewAndEdit.vue'
+import Edit from './components/Edit.vue'
 import RemoveButton from '@/components/RemoveButton.vue'
 
 let tableData = ref<Menu[]>([])
 let loading = ref<boolean>(false)
-const viewAndEdit = ref()
+const edit = ref()
 
 let formInline = ref<ListMenuQuery>({
   menuName: '',
@@ -122,7 +122,7 @@ const showEdit = (item: Menu, type: 'add' | 'update' | 'remove') => {
   if (type === 'remove') {
     // TODO
   } else {
-    viewAndEdit.value.show(item, type)
+    edit.value.show(item, type)
   }
 }
 
