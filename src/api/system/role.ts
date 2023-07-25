@@ -3,22 +3,22 @@ import type { SysUser } from './user'
 
 export type SysRole = {
   roleId: number
-  roleName: string
-  roleKey: string
-  roleSort: string
-  dataScope: string
-  menuCheckStrictly: boolean
-  deptCheckStrictly: boolean
-  status: string
-  delFlag: string
-  flag: boolean
-  menuIds: string[]
-  deptIds: string[]
+  roleName?: string
+  roleKey?: string
+  roleSort?: string
+  dataScope?: string
+  menuCheckStrictly?: boolean
+  deptCheckStrictly?: boolean
+  status?: string
+  delFlag?: string
+  flag?: boolean
+  menuIds?: string[]
+  deptIds?: string[]
 } & BaseEntity
 
 export type SysUserRole = {
-  userId: string
-  roleId: string
+  userId?: string
+  roleId?: string
 }
 
 // 查询角色列表

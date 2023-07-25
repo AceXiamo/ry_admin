@@ -39,8 +39,15 @@ export function listUser(query: SysUser): Promise<ResponsePageData<SysUser[]>> {
   })
 }
 
+type UserResponseData = {
+  posts: any,
+  roles: SysRole[],
+  postIds: number[],
+  roleIds: number[]
+} & ResponseData<SysUser>
+
 // 查询用户详细
-export function getUser(userId: string): Promise<ResponseData<SysUser>> {
+export function getUser(userId: string): Promise<UserResponseData> {
   return request({
     url: '/system/user/' + parseStrEmpty(userId),
     method: 'get'

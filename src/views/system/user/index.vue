@@ -35,13 +35,9 @@
         </el-form-item>
       </el-form>
       <div class="flex">
-        <el-button type="primary" plain size="small">
+        <el-button type="primary" plain size="small" @click="showEdit('add')">
           <font-awesome-icon :icon="['fas', 'plus']" />
           <span class="ml-[5px]">新增</span>
-        </el-button>
-        <el-button type="success" plain size="small">
-          <font-awesome-icon :icon="['fas', 'pen-to-square']" />
-          <span class="ml-[5px]">修改</span>
         </el-button>
         <el-button type="danger" plain size="small">
           <font-awesome-icon :icon="['fas', 'trash']" />
@@ -82,13 +78,13 @@
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="180" />
         <el-table-column label="操作" width="250">
-          <template #default>
+          <template #default="scope">
             <div class="flex flex-nowrap gap-[10px]">
               <el-link type="primary" size="small">
                 <font-awesome-icon :icon="['fas', 'store']" class="text-[12px]" />
                 <span class="text-[12px] ml-[5px]">绑定门店</span>
               </el-link>
-              <el-link type="primary" size="small">
+              <el-link type="primary" size="small" @click="showEdit('update', scope.row)">
                 <font-awesome-icon :icon="['fas', 'edit']" class="text-[12px]" />
                 <span class="text-[12px] ml-[5px]">修改</span>
               </el-link>
@@ -98,6 +94,26 @@
                   <span class="text-[12px] ml-[5px]">删除</span>
                 </el-link>
               </RemoveButton>
+
+              <el-dropdown
+                size="mini"
+              >
+                <span class="el-dropdown-link"> <i class="el-icon-d-arrow-right el-icon--right"></i>更多 </span>
+                <template #dropdown>
+                  <el-dropdown-menu>
+                  <el-dropdown-item command="handleResetPwd" icon="el-icon-key" v-hasPermi="['system:user:resetPwd']"
+                    >重置密码
+                  </el-dropdown-item>
+                  <el-dropdown-item
+                    command="handleAuthRole"
+                    icon="el-icon-circle-check"
+                    v-hasPermi="['system:user:edit']"
+                    >分配角色
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+                  </template>
+              </el-dropdown>
+
               <el-link type="primary" size="small">
                 <font-awesome-icon :icon="['fas', 'arrows-up-down-left-right']" />
                 <span class="text-[12px] ml-[5px]">更多</span>
@@ -114,31 +130,35 @@
         :total="tableData.total || 0"
         class="mt-4"
         @current-change="search($event, formInline.pageSize)"
-        @size-change="search(1 ,$event)"
+        @size-change="search(1, $event)"
       />
     </div>
   </div>
 
-  <ViewAndEdit ref="viewAndEdit" />
+  <Edit ref="edit" :dept-tree="deptTree" @confirm="submitForm" />
+  <RePwd ref="rePwd" @confirm="submitForm" />
 </template>
 
 <script lang="ts" setup name="User">
 import { ref, onMounted } from 'vue'
-import { SysDept, treeselect } from '@/api/system/dept'
-import { SysUser, SysUserQuery, listUser } from '@/api/system/user'
+import { SysDeptTree, treeselect } from '@/api/system/dept'
+import { SysUser, SysUserQuery, listUser, addUser, updateUser } from '@/api/system/user'
 import RemoveButton from '@/components/RemoveButton.vue'
-import ViewAndEdit from './components/ViewAndEdit.vue'
+import Edit from './components/Edit.vue'
+import { ElMessage } from 'element-plus'
+import RePwd from './components/RePwd.vue'
 
 let formInline = ref<SysUserQuery>({
   pageNum: 1,
   pageSize: 10
 })
 
-let deptTree = ref<SysDept[]>([])
+let deptTree = ref<SysDeptTree[]>([])
 let tableData = ref<ResponsePageData<SysUser[]>>({})
 let dateRange = ref<any>()
 let loading = ref<boolean>(false)
-const viewAndEdit = ref()
+const edit = ref()
+const rePwd = ref()
 
 onMounted(() => {
   loadTreeData()
@@ -154,7 +174,7 @@ const loadTreeData = () => {
 const search = (pageNum?: number, pageSize?: number) => {
   if (pageNum) formInline.value.pageNum = pageNum
   if (pageSize) formInline.value.pageSize = pageSize
-  
+
   loading.value = true
   listUser(formInline.value)
     .then((res) => {
@@ -170,11 +190,33 @@ const defaultProps = {
   label: 'label'
 }
 
-const handleNodeClick = (data: SysDept) => {
+const handleNodeClick = (data: SysDeptTree) => {
   console.log(data)
 }
 
 const handleStatusChange = (row: SysUser) => {}
 
 const removeStoreBind = (row: SysUser, storeId: string) => {}
+
+const showEdit = (type: 'add' | 'update', item?: SysUser) => {
+  edit.value.show(item, type)
+}
+
+const showRePwd = (item: SysUser) => {
+  rePwd.value.show(item)
+}
+
+const submitForm = (item: SysUser, type: 'add' | 'update') => {
+  if (type === 'add') {
+    addUser(item).then(() => {
+      ElMessage.success('新增成功')
+      search(1, formInline.value.pageSize)
+    })
+  } else if (type === 'update') {
+    updateUser(item).then(() => {
+      ElMessage.success('修改成功')
+      search(1, formInline.value.pageSize)
+    })
+  }
+}
 </script>

@@ -15,6 +15,12 @@ export type SysDept = {
   children?: SysDept[]
 } & BaseEntity
 
+export type SysDeptTree = {
+  id?: string
+  label?: string
+  children?: SysDeptTree[]
+}
+
 // 查询部门列表
 export function listDept(query: SysDept) {
   return request({
@@ -41,7 +47,7 @@ export function getDept(deptId: string) {
 }
 
 // 查询部门下拉树结构
-export function treeselect(): Promise<ResponseData<SysDept[]>> {
+export function treeselect(): Promise<ResponseData<SysDeptTree[]>> {
   return request({
     url: '/system/dept/treeselect',
     method: 'get'

@@ -15,11 +15,14 @@ export const useDictStore = defineStore('dict', () => {
     return data
   }
 
-  const use = (...dictType: string[]) => {
-    dictType.forEach((key: string) => {
-      getDict(key)
-    })
+  const dict = (dictType: string) => {
+    if (!dictData.value[dictType]) {
+      getDicts(dictType).then(res => {
+        dictData.value[dictType] = res.data!
+      })
+    }
+    return dictData.value[dictType]
   }
 
-  return { dictData, getDict, use }
+  return { dictData, dict, getDict }
 })
