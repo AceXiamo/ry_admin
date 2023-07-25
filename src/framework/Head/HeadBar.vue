@@ -21,7 +21,7 @@
         />
       </div>
       <div class="text-sm text-gray-600 flex gap-[10px]">
-        <div class="px-10px bg-blue-500 text-white rounded-2px cursor-default" v-for="(item, index) in menuLink">
+        <div class="px-10px bg-blue-500 text-white rounded-2px cursor-default" v-for="(item, index) in menuLink" :key="index">
           <span>{{ item }}</span>
         </div>
       </div>

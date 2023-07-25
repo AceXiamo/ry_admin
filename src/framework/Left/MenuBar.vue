@@ -6,9 +6,9 @@
         `min-w-[200px]`
       ]"
     >
-      <!-- menu item -->
+      <!-- MenuGroup -->
       <div @mouseenter="mouseInMenuItem(item, $event)" @mouseleave="mouseLeave">
-        <menu-item :item="item" :level="level"></menu-item>
+        <MenuGroup :item="item" :level="level"></MenuGroup>
       </div>
       <!-- child -->
       <div
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import MenuItem from './components/MenuItem.vue'
+import MenuGroup from './components/MenuGroup.vue'
 import type { Menu } from '@/api/menu'
 import { PropType, ref } from 'vue'
 import { useSettingsStore } from '@/store/settings'

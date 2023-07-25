@@ -3,12 +3,12 @@
     :class="[`w-[200px] bg-gray-600 origin-top-left transition-all relative z-[9999] duration-200 ${ani}`]"
     @mouseleave="leaveHandle"
   >
-    <item :menus="menu.children" :parent="parent"></item>
+    <MenuItem :menus="menu.children" :parent="parent"></MenuItem>
   </div>
 </template>
 
 <script lang="ts" setup>
-import Item from "./components/Item.vue";
+import MenuItem from "./components/MenuItem.vue";
 import { PropType, ref } from "vue";
 import type { Menu } from "@/api/menu";
 import type { Link } from './index'
