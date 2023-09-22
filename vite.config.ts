@@ -35,7 +35,7 @@ export default defineConfig((mode) => {
     server: {
       proxy: {
         '/dev-api': {
-          target: 'https://xm233.mynatapp.cc',
+          target: 'http://localhost:8080',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/dev-api/, ''),
         },
